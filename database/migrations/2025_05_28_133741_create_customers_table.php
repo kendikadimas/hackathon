@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('customers', function (Blueprint $table) {
-            $table->id(); // Kolom id (Primary Key, Auto Increment)
-            $table->string('name');
-            $table->string('phone')->unique()->nullable(); // Nomor telepon, unik jika diisi
-            $table->string('email')->unique()->nullable(); // Email, unik jika diisi
-            
-            $table->timestamps(); // Kolom created_at dan updated_at
-        });
+                $table->id();
+                $table->string('name');
+                $table->string('phone')->unique()->nullable();
+                $table->string('email')->unique()->nullable();
+                $table->text('address')->nullable(); // Tambahkan alamat
+                $table->timestamps();
+            });
     }
 
     /**

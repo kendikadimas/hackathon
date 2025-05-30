@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TransactionResource\Pages;
+use App\Filament\Resources\TransactionResource\RelationManagers; 
 // use App\Filament\Resources\TransactionResource\RelationManagers;
 use App\Models\Customer; // Pastikan Customer model di-import
 use App\Models\Transaction;
@@ -189,6 +190,7 @@ class TransactionResource extends Resource
     public static function getRelations(): array
     {
         return [
+            RelationManagers\ProductsRelationManager::class,
             // Jika Anda ingin menampilkan detail item transaksi, daftarkan RelationManager di sini
             // Contoh: RelationManagers\TransactionItemsRelationManager::class,
         ];
@@ -199,7 +201,7 @@ class TransactionResource extends Resource
         return [
             'index' => Pages\ListTransactions::route('/'),
             'create' => Pages\CreateTransaction::route('/create'),
-            // 'view' => Pages\ViewTransaction::route('/{record}'),
+            'view' => Pages\ViewTransaction::route('/{record}'),
             'edit' => Pages\EditTransaction::route('/{record}/edit'),
         ];
     }
