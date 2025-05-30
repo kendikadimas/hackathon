@@ -44,5 +44,14 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.ind
 // Perhatikan {product} di URL, ini yang digunakan oleh Route Model Binding
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 
+// Route untuk Navbar dan halaman dinamis
+
+Route::get('/', fn () => Inertia::render('Home'));
+Route::get('/Home', fn () => Inertia::render('Home'));
+Route::get('/Produk', fn () => Inertia::render('Produk'));
+Route::get('/FrequentlyAskedQuestions', fn () => Inertia::render('FrequentlyAskedQuestions'));
+Route::get('/About', fn () => Inertia::render('About'));
+
+
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
