@@ -2,107 +2,77 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product; // Pastikan Anda mengimpor model Product
 use Illuminate\Http\Request;
-use Inertia\Inertia; // Pastikan Anda mengimpor Inertia
+// Inertia tidak lagi digunakan di sini untuk Blade
+// use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the products.
-     */
-    public function index()
-    {
-        // Ambil semua produk dari database
-        // Anda bisa menambahkan paginasi, filter, atau order by di sini
-        $products = Product::all();
+    // Method untuk Inertia (jika masih ada)
+    // public function showBestSellers() { ... }
 
-        // Kirim data produk ke komponen React melalui Inertia
-        return Inertia::render('Product/Index', [
-            'products' => $products,
+    // Method baru untuk Blade view
+    public function showBestSellersBlade()
+    {
+        $bestSellerDishes = [
+            [
+                'id' => 1,
+                'imageUrl' => 'images/placeholder-dish-1.jpg', // Path relatif dari folder public
+                'name' => 'Salad Sehat Pagi Hari',
+                'price' => 230,
+                'rating' => 5,
+                'buyUrl' => '#'
+            ],
+            [
+                'id' => 2,
+                'imageUrl' => 'images/placeholder-dish-2.jpg',
+                'name' => 'Sarapan Energi Tinggi',
+                'price' => 230,
+                'rating' => 5,
+                'buyUrl' => '#'
+            ],
+            [
+                'id' => 3,
+                'imageUrl' => 'images/placeholder-dish-3.jpg',
+                'name' => 'Ayam Panggang Spesial',
+                'price' => 230,
+                'rating' => 4,
+                'buyUrl' => '#'
+            ],
+            [
+                'id' => 4,
+                'imageUrl' => 'images/placeholder-dish-4.jpg',
+                'name' => 'Piring Buah Segar',
+                'price' => 230,
+                'rating' => 5,
+                'buyUrl' => '#'
+            ],
+            [
+                'id' => 5,
+                'imageUrl' => 'images/placeholder-dish-5.jpg',
+                'name' => 'Salmon & Sayuran Organik',
+                'price' => 230,
+                'rating' => 5,
+                'buyUrl' => '#'
+            ],
+            [
+                'id' => 6,
+                'imageUrl' => 'images/placeholder-dish-6.jpg',
+                'name' => 'Nasi Goreng Kampung Juara',
+                'price' => 230,
+                'rating' => 3,
+                'buyUrl' => '#'
+            ],
+        ];
+
+        $pageTitle = "Our best Seller Dishes 🔥🔥";
+        $pageSubtitle = "Our fresh garden salad is a light and refreshing option. It features a mix of crisp lettuce, juicy tomatoe all tossed in your choice of dressing.";
+
+        // Menggunakan view() helper untuk Blade
+        return view('products.best_sellers', [
+            'bestSellerDishes' => $bestSellerDishes,
+            'pageTitle' => $pageTitle,
+            'pageSubtitle' => $pageSubtitle,
         ]);
     }
-
-    /**
-     * Display the specified product.
-     */
-    public function show(Product $product)
-    {
-        // Karena kita menggunakan Route Model Binding (Product $product),
-        // Laravel secara otomatis akan mencari produk berdasarkan ID yang diberikan
-        // dan menginjeksikannya ke dalam variabel $product.
-
-        // Kirim detail produk ke komponen React melalui Inertia
-        return Inertia::render('Product/Show', [
-            'product' => $product,
-        ]);
-    }
-
-    // --- Opsional: Metode untuk manajemen produk (CRUD) ---
-    // Jika Anda ingin menambahkan fitur membuat, mengedit, atau menghapus produk
-    // Anda bisa menambahkan metode 'create', 'store', 'edit', 'update', 'destroy' di sini.
-
-    /**
-     * Show the form for creating a new product.
-     */
-    // public function create()
-    // {
-    //     return Inertia::render('Product/Create');
-    // }
-
-    /**
-     * Store a newly created product in storage.
-     */
-    // public function store(Request $request)
-    // {
-    //     $validatedData = $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'description' => 'nullable|string',
-    //         'price' => 'required|numeric|min:0',
-    //         'stock' => 'required|integer|min:0',
-    //         'image_url' => 'nullable|url|max:255',
-    //     ]);
-
-    //     Product::create($validatedData);
-
-    //     return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan.');
-    // }
-
-    /**
-     * Show the form for editing the specified product.
-     */
-    // public function edit(Product $product)
-    // {
-    //     return Inertia::render('Product/Edit', [
-    //         'product' => $product,
-    //     ]);
-    // }
-
-    /**
-     * Update the specified product in storage.
-     */
-    // public function update(Request $request, Product $product)
-    // {
-    //     $validatedData = $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'description' => 'nullable|string',
-    //         'price' => 'required|numeric|min:0',
-    //         'stock' => 'required|integer|min:0',
-    //         'image_url' => 'nullable|url|max:255',
-    //     ]);
-
-    //     $product->update($validatedData);
-
-    //     return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui.');
-    // }
-
-    /**
-     * Remove the specified product from storage.
-     */
-    // public function destroy(Product $product)
-    // {
-    //     $product->delete();
-
-    //     return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus.');
-    // }
 }
