@@ -44,5 +44,20 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.ind
 // Perhatikan {product} di URL, ini yang digunakan oleh Route Model Binding
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 
+<<<<<<< Updated upstream
+=======
+// Route untuk Navbar dan halaman dinamis
+
+Route::get('/', fn () => Inertia::render('Home'));
+Route::get('/Home', fn () => Inertia::render('Home'));
+Route::get('/Produk', fn () => Inertia::render('Produk'));
+Route::get('/FrequentlyAskedQuestions', fn () => Inertia::render('FrequentlyAskedQuestions'));
+Route::get('/About', fn () => Inertia::render('About'));
+
+
+Route::get('/dishes', [DishController::class, 'index'])->name('dishes.index');
+
+
+>>>>>>> Stashed changes
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

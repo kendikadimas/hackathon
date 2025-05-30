@@ -117,6 +117,10 @@
     "include": [
         "resources/js/**/*.ts",
         "resources/js/**/*.d.ts",
+<<<<<<< Updated upstream
         "resources/js/**/*.tsx", "resources/js/pages/Welcome.jsx", "resources/js/app.jsx", "resources/js/pages/dashboard.jsx",
+=======
+        "resources/js/**/*.tsx", "resources/js/pages/Home.jsx", "resources/js/app.jsx", "resources/js/pages/Cart.jsx", "resources/js/components/HeroSection.jsx",
+>>>>>>> Stashed changes
     ]
 }
