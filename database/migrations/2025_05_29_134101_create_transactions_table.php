@@ -9,12 +9,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->id();
-            $table->string('description'); // Deskripsi transaksi
-            $table->decimal('amount', 15, 2); // Jumlah uang
-            $table->enum('type', ['income', 'expense']); // Tipe: pemasukan atau pengeluaran
-            $table->date('transaction_date'); // Tanggal transaksi
-            $table->timestamps();
+            $table->id(); // Kolom id (Primary Key, Auto Increment)
+
+            // Foreign key ke tabel customers (sesuaikan nama tabel jika berbeda)
+            $table->foreignId('cust_id')
+                  ->constrained('customers') // Asumsi tabel 'customers' ada
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict'); // Atau 'cascade', 'set null' sesuai kebutuhan
+
+            $table->string('code')->unique(); // Kode transaksi, unik
+            $table->string('name'); // Nama pelanggan (bisa diambil dari customer, atau diinput manual)
+            $table->string('phone')->nullable(); // Nomor telepon pelanggan
+            
+            // payment_model bisa berupa string atau enum jika pilihannya terbatas            
+            $table->decimal('total_price', 15, 2); // Total harga, 15 digit total, 2 digit desimal
+            
+            // status bisa berupa string atau enum
+            $table->string('status', 50)->default('pending'); // Contoh: 'pending', 'paid', 'failed', 'completed', 'cancelled'
+            
+            $table->timestamps(); // Kolom created_at dan updated_at
         });
     }
 

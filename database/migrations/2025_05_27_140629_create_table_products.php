@@ -16,9 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
-            $table->integer('stock')->default(0); // Stok awal bisa diatur 0 atau nilai lain
-            $table->string('image_url')->nullable();
-            $table->foreignId('umkm_id')->constrained('umkms')->onDelete('cascade'); // Jika ada tabel umkms
+            $table->integer('stock')->default(0);
+            $table->string('image_path')->nullable(); // Diubah dari binary ke string untuk path gambar
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('table_products');
+        Schema::dropIfExists('products'); // Diperbaiki dari 'table_products' menjadi 'products'
     }
 };

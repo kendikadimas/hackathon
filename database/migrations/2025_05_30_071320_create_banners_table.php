@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('testimonials', function (Blueprint $table) {
-            $table->id();
-            $table->string('author');
-            $table->text('content');
-            $table->string('photo_path')->nullable(); // Diubah dari binary ke string untuk path foto
-            $table->timestamps();
+        Schema::create('banners', function (Blueprint $table) {
+            $table->id(); // Kolom id (Primary Key, Auto Increment)
+            $table->string('photo'); // Kolom untuk menyimpan path atau nama file foto
+            $table->timestamps(); // Kolom created_at dan updated_at
         });
     }
 
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('testimonials');
+        Schema::dropIfExists('banners');
     }
 };

@@ -4,10 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage; // Tambahkan ini
 
-
-class Product extends Model
+class FinancialEntry extends Model
 {
     use HasFactory;
 
@@ -17,11 +15,12 @@ class Product extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'description',
-        'price',
-        'stock',
-        'image_path', // Disesuaikan dengan nama kolom di migrasi
+        'type',
+        'amount',
+        'entry_date',
+        'reference',
+        'notes',
     ];
 
     /**
@@ -30,11 +29,11 @@ class Product extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'price' => 'decimal:2',
-        'stock' => 'integer',
+        'amount' => 'decimal:2',
+        'entry_date' => 'datetime', // Atau 'date' jika Anda hanya menyimpan tanggal
     ];
 
-    /**
-     * The "booted" method of the model.
-     */
+    // Anda bisa menambahkan konstanta untuk tipe agar lebih mudah digunakan
+    public const TYPE_INCOME = 'income';
+    public const TYPE_EXPENSE = 'expense';
 }
