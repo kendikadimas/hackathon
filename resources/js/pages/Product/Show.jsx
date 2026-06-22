@@ -1,110 +1,104 @@
-import React, { useState } from 'react';
-import { Head, Link, useForm } from '@inertiajs/react';
-import Layout from '@/Layouts/AuthenticatedLayout'; // Sesuaikan dengan layout Anda
 
-export default function ProductShow({ auth, product }) {
-    const { data, setData, post, processing, errors, recentlySuccessful } = useForm({
-        product_id: product.id,
-        quantity: 1,
-    });
+import React from 'react';
+import { Head, Link } from '@inertiajs/react';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'; // Asumsi Anda punya layout ini
 
-    const handleBuyNow = (e) => {
-        e.preventDefault();
-        post(route('orders.placeOrder'), {
-            onSuccess: () => {
-                alert('Pesanan berhasil ditempatkan!');
-                // Opsional: Redirect atau refresh halaman untuk menampilkan stok terbaru
-                window.location.reload();
-            },
-            onError: (err) => {
-                let errorMessage = 'Terjadi kesalahan saat memproses pesanan.';
-                if (err.error) { // Cek jika ada pesan error spesifik dari backend
-                    errorMessage = err.error;
-                } else if (err.quantity) { // Cek jika ada error validasi kuantitas
-                    errorMessage = err.quantity;
-                }
-                alert(errorMessage);
-            },
-        });
-    };
+// Komponen untuk menampilkan detail produk individual
+function ProductDetailCard({ product }) {
+  // Fallback image jika product.image_url tidak ada atau error
+  const handleError = (e) => {
+    e.target.onerror = null; // Mencegah loop error jika placeholder juga error
+    e.target.src = `https://placehold.co/600x400/e2e8f0/94a3b8?text=Gambar+Tidak+Tersedia`;
+  };
 
-    return (
-        <Layout
-            user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Detail Produk</h2>}
-        >
-            <Head title={product.name} />
+  return (
+    <div className="bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden transform transition-all hover:scale-105 duration-300 ease-in-out">
+      <div className="md:flex">
+        <div className="md:flex-shrink-0 md:w-1/2">
+          {product.image_url ? (
+            <img
+              className="h-64 w-full object-cover md:h-full"
+              src={product.image_url}
+              alt={`Gambar ${product.name}`}
+              onError={handleError}
+            />
+          ) : (
+            <img
+              className="h-64 w-full object-cover md:h-full"
+              src={`https://placehold.co/600x400/e2e8f0/94a3b8?text=Gambar+Tidak+Tersedia`}
+              alt="Gambar tidak tersedia"
+            />
+          )}
+        </div>
+        <div className="p-8 md:w-1/2">
+          <div className="uppercase tracking-wide text-sm text-indigo-500 dark:text-indigo-400 font-semibold">
+            Produk Detail
+          </div>
+          <h1 className="block mt-1 text-3xl leading-tight font-extrabold text-gray-900 dark:text-white">
+            {product.name}
+          </h1>
+          <p className="mt-4 text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+            {product.description || 'Tidak ada deskripsi untuk produk ini.'}
+          </p>
 
-            <div className="py-12">
-                <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 flex flex-col md:flex-row gap-6">
-                        <div className="md:w-1/2">
-                            {product.image_url ? (
-                                <img
-                                    src={product.image_url}
-                                    alt={product.name}
-                                    className="w-full h-auto rounded-lg shadow-md object-cover"
-                                />
-                            ) : (
-                                <div className="w-full h-64 bg-gray-200 flex items-center justify-center rounded-lg shadow-md">
-                                    <span className="text-gray-500">Gambar Tidak Tersedia</span>
-                                </div>
-                            )}
-                        </div>
-                        <div className="md:w-1/2">
-                            <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
-                            <p className="mt-3 text-gray-700 leading-relaxed">{product.description}</p>
-                            <div className="mt-4">
-                                <span className="text-2xl font-semibold text-blue-600">
-                                    Rp{product.price.toLocaleString('id-ID')}
-                                </span>
-                            </div>
-                            <div className="mt-4 text-gray-800">
-                                <span className="font-medium">Stok Tersedia: </span>
-                                <span className={`${product.stock > 0 ? 'text-green-600' : 'text-red-600'} font-bold`}>
-                                    {product.stock > 0 ? product.stock : 'Habis'}
-                                </span>
-                            </div>
-
-                            <form onSubmit={handleBuyNow} className="mt-6">
-                                <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">Jumlah:</label>
-                                <input
-                                    type="number"
-                                    id="quantity"
-                                    min="1"
-                                    max={product.stock} // Batasi input sesuai stok
-                                    value={data.quantity}
-                                    onChange={(e) => setData('quantity', Math.max(1, Math.min(parseInt(e.target.value) || 1, product.stock)))} // Pastikan kuantitas tidak kurang dari 1 dan tidak lebih dari stok
-                                    className="mt-1 block w-24 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                    disabled={product.stock === 0} // Disable input jika stok 0
-                                />
-                                {errors.quantity && <div className="text-red-500 text-sm mt-1">{errors.quantity}</div>}
-
-                                <button
-                                    type="submit"
-                                    disabled={processing || product.stock === 0 || data.quantity <= 0}
-                                    className="mt-6 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    {processing ? 'Memproses...' : 'Beli Sekarang'}
-                                </button>
-                            </form>
-
-                            {recentlySuccessful && (
-                                <div className="mt-4 text-green-600 text-sm">Pesanan berhasil diproses!</div>
-                            )}
-
-                            <div className="mt-6">
-                                <Link
-                                    href={route('products.index')}
-                                    className="text-blue-500 hover:underline"
-                                >
-                                    &larr; Kembali ke Daftar Produk
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          <div className="mt-6">
+            <div className="flex items-center justify-between">
+              <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+                Rp {Number(product.price).toLocaleString('id-ID')}
+              </p>
+              <p className={`text-md font-medium ${product.stock > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                Stok: {product.stock > 0 ? product.stock : 'Habis'}
+              </p>
             </div>
-        </Layout>
-    );
+          </div>
+
+          <div className="mt-8">
+            {product.stock > 0 ? (
+              <button
+                type="button"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+              >
+                Tambah ke Keranjang
+              </button>
+            ) : (
+              <p className="text-center text-red-500 dark:text-red-400 font-semibold">
+                Stok produk ini sedang habis.
+              </p>
+            )}
+            <Link
+              href={route('products.index')} // Asumsi Anda punya route 'products.index'
+              className="mt-4 block text-center text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium transition-colors duration-300"
+            >
+              Kembali ke Daftar Produk
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+// Halaman utama untuk menampilkan detail produk
+// 'product' akan di-pass sebagai prop dari controller Laravel via Inertia
+export default function Show({ auth, product }) {
+  return (
+    // Ganti AuthenticatedLayout dengan layout yang Anda gunakan
+    // Jika tidak menggunakan layout, Anda bisa membungkusnya dengan Fragment <> </>
+    // atau div biasa dengan styling yang sesuai.
+    <AuthenticatedLayout
+      user={auth.user}
+      header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Detail Produk: {product.name}</h2>}
+    >
+      <Head title={`Produk - ${product.name}`} />
+
+      <div className="py-12 bg-gray-100 dark:bg-gray-900 min-h-screen">
+        <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
+          <div className="overflow-hidden">
+            <ProductDetailCard product={product} />
+          </div>
+        </div>
+      </div>
+    </AuthenticatedLayout>
+  );
 }

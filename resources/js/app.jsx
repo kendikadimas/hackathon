@@ -13,8 +13,8 @@ createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => {
         // Karena app.jsx, maka kita harusnya hanya mencari .jsx
-        const pages = import.meta.glob('./Pages/**/*.jsx'); // <<< PASTIKAN INI .jsx
-        const pagePath = `./Pages/${name}.jsx`;             // <<< PASTIKAN INI .jsx
+        const pages = import.meta.glob('./pages/**/*.jsx'); // <<< PASTIKAN INI .jsx
+        const pagePath = `./pages/${name}.jsx`;             // <<< PASTIKAN INI .jsx
 
         // Tambahkan console log untuk debugging yang lebih spesifik
         console.log(`[Inertia Resolve] Trying to resolve page: '${name}'`);

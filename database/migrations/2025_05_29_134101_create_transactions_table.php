@@ -10,10 +10,17 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('description'); // Deskripsi transaksi
-            $table->decimal('amount', 15, 2); // Jumlah uang
-            $table->enum('type', ['income', 'expense']); // Tipe: pemasukan atau pengeluaran
-            $table->date('transaction_date'); // Tanggal transaksi
+            
+            // Foreign key ke tabel customers
+            $table->foreignId('customer_id')
+                  ->constrained('customers')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+            
+            $table->string('code')->unique();
+            $table->decimal('total_price', 15, 2);
+            $table->string('status', 50)->default('pending');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
